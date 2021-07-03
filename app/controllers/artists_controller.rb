@@ -1,4 +1,6 @@
 class ArtistsController < ApplicationController
+  before_action :allow_artists?, only: [:new]
+
   def index
     @artists = Artist.all
   end
@@ -49,4 +51,11 @@ class ArtistsController < ApplicationController
   def artist_params
     params.require(:artist).permit(:name)
   end
+
+  def allow_artists?
+    if !Preference.last.allow_create_artists
+      redirect_to artists_path
+    end
+  end
+
 end
